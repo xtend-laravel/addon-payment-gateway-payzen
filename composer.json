@@ -1,0 +1,41 @@
+{
+    "name": "xtend-laravel/addon-payment-gateway-payzen",
+    "description": "Payzen Payment Gateway for XtendLunar",
+    "type": "library",
+    "keywords": [
+        "laravel",
+        "xtendlunar",
+        "payment"
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "XtendLunar\\Addons\\PaymentGatewayPayzen\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Adam Lee",
+            "email": "adam@codelabx.ltd"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "saloonphp/saloon": "^3.0",
+        "spatie/laravel-data": "dev-main"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "XtendLunar\\Addons\\PaymentGatewayPayzen\\PaymentGatewayPayzenProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "pestphp/pest-plugin": true
+        }
+    }
+}
