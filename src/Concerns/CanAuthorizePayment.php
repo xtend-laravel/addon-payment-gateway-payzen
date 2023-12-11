@@ -58,7 +58,7 @@ trait CanAuthorizePayment
                 ),
             );
 
-            dd($response->json());
+            dd($response->json(), request()->all());
             $this->paymentIntent = static::$payzen->capturePaymentOrder($payzenOrderId);
 
             if ($this->paymentIntent['error'] ?? false) {
