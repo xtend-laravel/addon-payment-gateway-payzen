@@ -9,14 +9,29 @@ trait CanAuthorizePayment
 {
     use CanReleasePayment;
 
+    protected string $tempPassword = 'Jx0hHSIcsE4YqR8VJXvJ1KG9IadumXusbI3rchic6XvDK';
+
     public function authorize(): PaymentAuthorize
     {
+        if (request()->has('kr-hash-algorithm') && !$this->checkHash(request()->all(), $this->tempPassword)) {
+            return new PaymentAuthorize(
+                success: false,
+                message: 'Hash not valid',
+            );
+        }
+
         // if ($this->order?->placed_at) {
         //     return new PaymentAuthorize(
         //         success: false,
         //         message: 'This order has already been placed',
         //     );
         // }
+
+        // $krAnswer = json_decode(request('kr-answer'), true);
+
+        // $orderStatus = $krAnswer['orderStatus'];
+        // $orderId = $krAnswer['orderDetails']['orderId'];
+        // $transactionUuid = $krAnswer['transactions'][0]['uuid'];
 
         $uuid = $this->data['payzen_order_id'] ?? null;
         if (! $uuid) {
@@ -80,5 +95,16 @@ trait CanAuthorizePayment
             'COMPLETED',
             'APPROVED',
         ]);
+    }
+
+    protected function checkHash($data, $key)
+    {
+       $supported_sign_algos = array('sha256_hmac');
+       if (!in_array($data['kr-hash-algorithm'], $supported_sign_algos)) {
+           return false;
+       }
+       $kr_answer = str_replace('\/', '/', $data['kr-answer']);
+       $hash = hash_hmac('sha256', $kr_answer, $key);
+       return ($hash == $data['kr-hash']);
     }
 }
